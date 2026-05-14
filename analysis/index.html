@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive Analysis — Pappy's Sunday Letters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f8f4ed; --ink: #1a1714; --ink-light: #4a4540; --ink-muted: #8a8278;
+  --sepia: #c8a96e; --sepia-light: #e8d9b8; --sepia-pale: #f2ead8;
+  --blue: #2e4a6e; --green: #2e5c3e; --red: #8b2e2e; --gold: #9a7310;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--cream); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.7; }
+a { color: var(--blue); text-decoration: none; }
+.nav { background: var(--ink); padding: 0.75rem 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.nav-title { font-family: var(--font-serif); font-size: 1rem; color: var(--sepia); font-style: italic; margin-right: auto; }
+.nav a { color: #fff; font-size: 0.85rem; opacity: 0.75; }
+.nav a:hover { opacity: 1; }
+.page-header { text-align: center; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--sepia-light); position: relative; }
+.page-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--sepia), transparent); }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1rem; }
+.page-header h1 { font-family: var(--font-serif); font-size: 2.8rem; font-weight: 400; margin-bottom: 0.75rem; }
+.page-header p { font-size: 1.05rem; color: var(--ink-muted); font-style: italic; }
+.container { max-width: 920px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 3rem 0; border-bottom: 1px solid var(--sepia-light); }
+.section-title { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 0.4rem; }
+.section-sub { font-size: 0.9rem; color: var(--ink-muted); font-style: italic; margin-bottom: 2rem; }
+.bar-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+.bar-row { display: flex; align-items: center; gap: 0.75rem; }
+.bar-label { width: 190px; flex-shrink: 0; font-size: 0.88rem; color: var(--ink-light); text-align: right; }
+.bar-track { flex: 1; background: var(--sepia-pale); border-radius: 2px; height: 22px; position: relative; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 2px; }
+.bar-count { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--ink); font-weight: 500; }
+.chart-wrap { margin: 1.5rem 0; overflow-x: auto; }
+.tone-insight { background: white; border: 1px solid var(--sepia-light); border-radius: 4px; padding: 1.5rem; margin-top: 1.5rem; border-left: 3px solid var(--green); }
+.tone-insight p { font-size: 0.95rem; color: var(--ink-light); line-height: 1.7; }
+.tone-insight p strong { color: var(--ink); }
+.milestone-list { display: flex; flex-direction: column; }
+.milestone-item { display: grid; grid-template-columns: 180px 1fr; gap: 1.5rem; padding: 0.85rem 0; border-bottom: 1px solid var(--sepia-light); align-items: baseline; }
+.milestone-item:last-child { border-bottom: none; }
+.milestone-name { font-size: 0.85rem; color: var(--ink-muted); font-style: italic; text-align: right; }
+.milestone-detail { font-size: 0.9rem; color: var(--ink-light); line-height: 1.5; }
+.milestone-detail strong { color: var(--ink); font-weight: 500; }
+.milestone-detail em { font-style: italic; color: var(--ink-muted); font-size: 0.85rem; }
+.easter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+.easter-card { background: white; border: 1px solid var(--sepia-light); border-radius: 4px; padding: 0.85rem; transition: border-color 0.15s; display: block; color: var(--ink); }
+.easter-card:hover { border-color: var(--sepia); }
+.easter-year { font-family: var(--font-serif); font-size: 1.2rem; color: var(--sepia); display: block; }
+.easter-subject { font-size: 0.82rem; color: var(--ink-light); font-style: italic; margin-top: 0.2rem; display: block; }
+.footer { text-align: center; padding: 3rem 2rem; color: var(--ink-muted); font-size: 0.85rem; font-style: italic; border-top: 1px solid var(--sepia-light); margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-title">Pappy's Sunday Letters</span>
+  <a href="../index.html">Home</a>
+  <a href="../letters/index.html">Letters</a>
+  <a href="../timeline/index.html">Timeline</a>
+  <a href="../chapters/index.html">Chapters</a>
+  <a href="../family/index.html">Family</a>
+  <a href="../about/index.html">About</a>
+</nav>
+
+<div class="page-header">
+  <p class="eyebrow">Inside the archive</p>
+  <h1>Analysis</h1>
+  <p>What 18 years of letters reveal about a life</p>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <h2 class="section-title">People</h2>
+    <p class="section-sub">How often each family member appears by name across 1,117 letters</p>
+    <div class="bar-chart" id="people-chart"></div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Recurring themes</h2>
+    <p class="section-sub">The subjects that defined his weeks, counted across the full archive</p>
+    <div class="bar-chart" id="topics-chart"></div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">The Appalachian Trail over time</h2>
+    <p class="section-sub">Mention frequency by year — from the peak years through the long farewell</p>
+    <div class="chart-wrap">
+      <svg id="at-chart" width="860" height="220" viewBox="0 0 860 220" style="max-width:100%"></svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Emotional tone</h2>
+    <p class="section-sub">Keyword categories counted across all 466,478 words</p>
+    <div class="bar-chart" id="tone-chart"></div>
+    <div class="tone-insight">
+      <p>Words of joy and gratitude appear nearly 50% more often than words of loss across the complete archive — including 2023 and 2024. Draw your own conclusions.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Key milestones</h2>
+    <p class="section-sub">First and last appearances of the threads that run through eighteen years</p>
+    <div class="milestone-list" id="milestones"></div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Easter through the years</h2>
+    <p class="section-sub">His favorite holiday — fifteen letters spanning 2009 to 2026</p>
+    <div class="easter-grid" id="easter-grid"></div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>Kenneth Wayne Buchanan · January 15, 1936 – May 2026</p>
+  <p style="margin-top:0.4rem">Assembled with love by the Buchanan &amp; Long families</p>
+</footer>
+
+<script>
+const PEOPLE = [
+  ["Patricia / GSH", 970],["Wayne", 425],["Diane / PBBD", 420],
+  ["Herb", 217],["Anita", 176],["Alan", 161],["Laura", 152],
+  ["Linda", 140],["Meredith", 120],["Katy", 101],["John", 78],
+  ["Joe Long", 62],["Adam", 59],["Christopher", 50],["Jimmy", 48],
+  ["Janet", 33],["Hazel", 18],["Savannah", 16],
+];
+
+const TOPICS = [
+  ["Appalachian Trail", 2038, "#2e4a6e"],
+  ["Garden", 819, "#2e5c3e"],
+  ["Pond & Property", 450, "#5c7a3e"],
+  ["Tractors", 421, "#6e4a2e"],
+  ["Church & ECC", 348, "#9a7310"],
+  ["Cats", 249, "#c8a96e"],
+  ["Christmas", 242, "#8b2e2e"],
+  ["Travel", 233, "#2e6e5c"],
+  ["Band & Music", 229, "#4a2e6e"],
+  ["Birds", 135, "#2e5c6e"],
+  ["Studebaker", 105, "#6e2e4a"],
+  ["Leukemia & Chemo", 91, "#8b2e2e"],
+  ["Chrysler Imperial", 75, "#6e4a2e"],
+  ["Great-grandchildren", 73, "#2e5c3e"],
+  ["Easter", 61, "#9a7310"],
+  ["Thanksgiving", 55, "#c8a96e"],
+  ["Miata", 49, "#6e2e4a"],
+  ["COVID", 38, "#4a4540"],
+  ["TAVR & Heart", 21, "#8b2e2e"],
+];
+
+const TONE = [
+  ["Joy & gratitude", 2043, "#2e5c3e"],
+  ["Loss & grief", 1396, "#8b2e2e"],
+  ["Wonder & nature", 495, "#2e4a6e"],
+  ["Humor", 130, "#9a7310"],
+  ["Faith", 129, "#6e4a2e"],
+];
+
+const AT_BY_YEAR = {
+  2008:15, 2009:182, 2010:167, 2011:167, 2012:146, 2013:109,
+  2014:148, 2015:179, 2016:136, 2017:119, 2018:125, 2019:108,
+  2020:93, 2021:65, 2022:55, 2023:77, 2024:63, 2025:61, 2026:23
+};
+
+const MILESTONES = [
+  { name: "Ramp (garden)",       first: "Jan 18, 2009 — Birthday Week",      last: "Apr 26, 2026 — Bundles from Heaven" },
+  { name: "Appalachian Trail",   first: "Aug 13, 2009 — Fwd: Watauga Lake",  last: "Mar 23, 2025 — Family Things, M&P" },
+  { name: "Cletrac (tractor)",   first: "Jan 18, 2009 — Birthday Week",      last: "Jun 20, 2010 — Half Done" },
+  { name: "Studebaker",          first: "Sep 13, 2009 — Dipsy Doodle",       last: "Sep 8, 2024 — Friends & Family" },
+  { name: "Chemo",               first: "Dec 21, 2008 — Ado",                last: "Mar 1, 2026 — OK, so far" },
+  { name: "COVID",               first: "Jul 26, 2020 — Sequel",             last: "Dec 4, 2022 — Prediclection" },
+  { name: "TAVR (heart valve)",  first: "Jan 10, 2021 — Nil",                last: "Feb 7, 2021 — TAVR" },
+  { name: "Remission",           first: "Sep 17, 2023 — Remission",          last: null },
+  { name: "Great-grandchildren", first: "Oct 11, 2024 — FYI",               last: null },
+  { name: "Julia",               first: "Oct 26, 2025 — All Fired Up",       last: "May 3, 2026 — Abishag" },
+  { name: "Abishag",             first: "May 3, 2026 — Abishag ?",           last: null },
+];
+
+const EASTER = [
+  { year: 2009, subject: "Easter et al",  folder: "2009-04-12_Easter-et-al" },
+  { year: 2012, subject: "Easter",        folder: "2012-04-08_Easter" },
+  { year: 2013, subject: "Easter",        folder: "2013-03-31_Easter" },
+  { year: 2014, subject: "Easter",        folder: "2014-04-20_Easter" },
+  { year: 2015, subject: "Easter",        folder: "2015-04-05_Easter" },
+  { year: 2017, subject: "Easter",        folder: "2017-04-16_Easter" },
+  { year: 2018, subject: "He is Risen",   folder: "2018-04-01_He-is-Risen" },
+  { year: 2019, subject: "Easter",        folder: "2019-04-21_Easter" },
+  { year: 2020, subject: "He is Risen",   folder: "2020-04-12_He-is-Risen" },
+  { year: 2021, subject: "Easter",        folder: "2021-04-04_Easter" },
+  { year: 2022, subject: "Easter",        folder: "2022-04-17_Easter" },
+  { year: 2023, subject: "Easter",        folder: "2023-04-09_Easter" },
+  { year: 2024, subject: "Easter",        folder: "2024-03-31_Easter" },
+  { year: 2025, subject: "Easter",        folder: "2025-04-20_Easter" },
+  { year: 2026, subject: "He's Alive",    folder: "2026-04-05_Hes-Alive" },
+];
+
+function renderBars(id, data, colorKey) {
+  const el = document.getElementById(id);
+  const max = Math.max(...data.map(d => d[1]));
+  el.innerHTML = data.map(d => {
+    const [label, count, color] = d;
+    const pct = (count / max * 100).toFixed(1);
+    const c = color || 'var(--sepia)';
+    return `<div class="bar-row">
+      <span class="bar-label">${label}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${c};opacity:0.85"></div>
+        <span class="bar-count">${count.toLocaleString()}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderLineChart() {
+  const svg = document.getElementById('at-chart');
+  const W=860, H=220, PL=45, PR=20, PT=20, PB=35;
+  const years = Object.keys(AT_BY_YEAR).map(Number);
+  const vals  = Object.values(AT_BY_YEAR);
+  const maxV  = Math.max(...vals);
+  const xs = i => PL + (i / (years.length-1)) * (W-PL-PR);
+  const ys = v => PT + (1 - v/maxV) * (H-PT-PB);
+  const pts = years.map((y,i) => [xs(i), ys(AT_BY_YEAR[y])]);
+  const path = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const area = path+` L${pts[pts.length-1][0]},${H-PB} L${pts[0][0]},${H-PB} Z`;
+
+  let html = `<defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2e4a6e" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#2e4a6e" stop-opacity="0.02"/>
+  </linearGradient></defs>
+  <path d="${area}" fill="url(#grad)"/>
+  <path d="${path}" fill="none" stroke="#2e4a6e" stroke-width="2.5" stroke-linejoin="round"/>`;
+
+  years.forEach((y,i) => {
+    const x=xs(i), yv=ys(AT_BY_YEAR[y]);
+    html += `<text x="${x}" y="${H-8}" text-anchor="middle" font-size="11" fill="#8a8278" font-family="'Source Serif 4',Georgia,serif">${y}</text>`;
+    html += `<circle cx="${x}" cy="${yv}" r="3.5" fill="#2e4a6e"/>`;
+    if (AT_BY_YEAR[y]>=140 || y===2026 || y===2023 || y===2022) {
+      html += `<text x="${x}" y="${yv-10}" text-anchor="middle" font-size="10" fill="#2e4a6e" font-family="'Source Serif 4',Georgia,serif">${AT_BY_YEAR[y]}</text>`;
+    }
+  });
+  svg.innerHTML = html;
+}
+
+function renderMilestones() {
+  document.getElementById('milestones').innerHTML = MILESTONES.map(m => {
+    const lastStr = m.last ? ` <span style="color:var(--ink-muted)">→</span> <strong>${m.last.split(' — ')[0]}</strong> — <em>${m.last.split(' — ')[1]}</em>` : ' <em style="color:var(--ink-muted)">(still present at end of archive)</em>';
+    return `<div class="milestone-item">
+      <span class="milestone-name">${m.name}</span>
+      <span class="milestone-detail"><strong>${m.first.split(' — ')[0]}</strong> — <em>${m.first.split(' — ')[1]}</em>${lastStr}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderEaster() {
+  document.getElementById('easter-grid').innerHTML = EASTER.map(e =>
+    `<a class="easter-card" href="../letters/${e.folder}.html">
+      <span class="easter-year">${e.year}</span>
+      <span class="easter-subject">${e.subject}</span>
+    </a>`
+  ).join('');
+}
+
+renderBars('people-chart', PEOPLE);
+renderBars('topics-chart', TOPICS);
+renderBars('tone-chart', TONE);
+renderLineChart();
+renderMilestones();
+renderEaster();
+</script>
+</body>
+</html>

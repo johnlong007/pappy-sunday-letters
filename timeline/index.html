@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline — Pappy's Sunday Letters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav class="site-nav"><a href="../index.html" class="nav-title">Pappy's Sunday Letters</a><a href="../letters/index.html">Letters</a><a href="../timeline/index.html" class="nav-active">Timeline</a><a href="../chapters/index.html">Chapters</a><a href="../family/index.html">Family</a><a href="../about/index.html">About</a></nav>
+
+<div class="page-header"><p class="eyebrow">Eighteen years at a glance</p><h1>Timeline</h1><p class="subtitle">Filter by theme to trace any thread across the full archive</p></div>
+<div class="container">
+
+<div class="header">
+  <div class="container">
+    <p class="header-eyebrow">A family archive · 2008 – 2026</p>
+    <h1>Kenneth Wayne Buchanan<br><em>A Life in Letters</em></h1>
+    <p class="header-sub">Eighteen years of Sunday correspondence, faithfully kept</p>
+    <div class="header-stats">
+      <div class="stat">
+        <span class="stat-number">1,521</span>
+        <span class="stat-label">Letters</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">10,167</span>
+        <span class="stat-label">Photographs</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">466,478</span>
+        <span class="stat-label">Words</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">18</span>
+        <span class="stat-label">Years</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="legend">
+    <div class="legend-item" onclick="filterTag('celebration')">
+      <span class="legend-dot" style="background:var(--cat-celebration)"></span> Celebration
+    </div>
+    <div class="legend-item" onclick="filterTag('appalachian')">
+      <span class="legend-dot" style="background:var(--cat-appalachian)"></span> Appalachian Trail
+    </div>
+    <div class="legend-item" onclick="filterTag('travel')">
+      <span class="legend-dot" style="background:var(--cat-travel)"></span> Travel
+    </div>
+    <div class="legend-item" onclick="filterTag('cars')">
+      <span class="legend-dot" style="background:var(--cat-cars)"></span> Cars & Projects
+    </div>
+    <div class="legend-item" onclick="filterTag('health')">
+      <span class="legend-dot" style="background:var(--cat-health)"></span> Health
+    </div>
+    <div class="legend-item" onclick="filterTag('loss')">
+      <span class="legend-dot" style="background:var(--cat-loss)"></span> Loss & Memorial
+    </div>
+    <div class="legend-item" onclick="filterTag('milestone')">
+      <span class="legend-dot" style="background:var(--cat-milestone)"></span> Milestone
+    </div>
+    <div class="legend-item" onclick="filterTag('family')">
+      <span class="legend-dot" style="background:var(--cat-family)"></span> Family
+    </div>
+    <div class="legend-item" onclick="filterTag(null)" style="margin-left:auto; color:var(--ink-muted)">
+      Show all
+    </div>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+</div>
+
+<div class="footer">
+  <p>Kenneth Wayne Buchanan · January 15, 1936 – May 2026</p>
+  <p style="margin-top:0.5rem">Assembled with love by the Buchanan &amp; Long families</p>
+</div>
+
+<script>
+const YEAR_NOTES = {
+  "2008": "The archive begins — Pappy is 72, writing from Blountville, Tennessee.",
+  "2009": "A prolific year. The Yucatan bicycle trip. Korea dispatches from Wayne. The Studebaker project takes shape.",
+  "2011": "Peak correspondence — 121 letters. The AT crew is in full stride.",
+  "2016": "January 15: Pappy turns 80. The emails keep coming without missing a beat.",
+  "2019": "The transition from AOL to Gmail. The rhythm never breaks.",
+  "2020": "COVID arrives in March. Pappy writes from lockdown: \"Undisclosed Location.\"",
+  "2021": "TAVR heart procedure in February. Back at the keyboard within days.",
+  "2023": "Patricia passes in May. Subject line: \"Mom.\" He writes again the following Sunday.",
+  "2024": "Leukemia treatment begins. 78 letters — more than any year since 2017.",
+  "2025": "Still writing at 89. \"Two Years\" marks Patricia's second anniversary.",
+  "2026": "January 15: Pappy turns 90. His final letter arrives May 3rd, titled \"Abishag.\""
+};
+
+const ALL_DATA = {
+  "2008": { total: 17, images: 20, words: 3332, notable: [
+    { date: "2008-12-09", subject: "Fwd: last treatment", tags: ["health"] },
+    { date: "2008-12-25", subject: "Christmas", tags: ["celebration"] }
+  ]},
+  "2009": { total: 119, images: 456, words: 26161, notable: [
+    { date: "2009-01-18", subject: "Birthday Week", tags: ["celebration", "milestone"] },
+    { date: "2009-02-09", subject: "Fwd: Memorial", tags: ["loss"] },
+    { date: "2009-03-22", subject: "Biking the Yucatan", tags: ["travel"] },
+    { date: "2009-04-12", subject: "Easter et al", tags: ["celebration"] },
+    { date: "2009-05-24", subject: "Thank You for Helping with 2009 Damascus HC", tags: ["appalachian"] },
+    { date: "2009-07-12", subject: "Fwd: Korea!!", tags: ["travel"] },
+    { date: "2009-09-21", subject: "1953-1954-1955 Studebaker Parts", tags: ["cars"] }
+  ]},
+  "2010": { total: 115, images: 534, words: 27823, notable: [
+    { date: "2010-01-17", subject: "Older but well, Older", tags: ["milestone"] },
+    { date: "2010-03-20", subject: "Aunt G", tags: ["loss"] },
+    { date: "2010-04-04", subject: "Mixed", tags: ["celebration"] },
+    { date: "2010-07-20", subject: "Family Addition", tags: ["family"] },
+    { date: "2010-10-29", subject: "Old 57", tags: ["cars"] },
+    { date: "2010-12-25", subject: "Trip Report", tags: ["travel"] }
+  ]},
+  "2011": { total: 121, images: 621, words: 31204, notable: [
+    { date: "2011-01-16", subject: "Snow Bound", tags: ["celebration"] },
+    { date: "2011-06-05", subject: "56 and Counting", tags: ["milestone"] },
+    { date: "2011-07-24", subject: "AT before and after", tags: ["appalachian"] },
+    { date: "2011-08-07", subject: "Work Schedule for Gravel on Round Bald", tags: ["appalachian"] },
+    { date: "2011-10-16", subject: "Rejoice — Kill the Fatted Pig", tags: ["celebration"] },
+    { date: "2011-12-25", subject: "Rejoice", tags: ["celebration"] }
+  ]},
+  "2012": { total: 97, images: 498, words: 23817, notable: [
+    { date: "2012-01-22", subject: "Great Grand Pa", tags: ["family", "milestone"] },
+    { date: "2012-04-08", subject: "Easter", tags: ["celebration"] },
+    { date: "2012-06-24", subject: "53 Studebaker", tags: ["cars"] },
+    { date: "2012-09-18", subject: "Newfoundland", tags: ["travel"] },
+    { date: "2012-11-11", subject: "Veterans Day", tags: ["milestone"] },
+    { date: "2012-12-09", subject: "From Kenneth Buchanan — first Gmail send", tags: ["milestone"] }
+  ]},
+  "2013": { total: 93, images: 512, words: 21634, notable: [
+    { date: "2013-01-21", subject: "77 and Counting", tags: ["milestone"] },
+    { date: "2013-03-31", subject: "Easter", tags: ["celebration"] },
+    { date: "2013-06-30", subject: "Philippines", tags: ["travel"] },
+    { date: "2013-07-01", subject: "Villa Verde Trail", tags: ["travel"] },
+    { date: "2013-10-06", subject: "Cat House", tags: ["celebration"] }
+  ]},
+  "2014": { total: 96, images: 487, words: 22108, notable: [
+    { date: "2014-03-30", subject: "Taps", tags: ["loss"] },
+    { date: "2014-04-20", subject: "Easter", tags: ["celebration"] },
+    { date: "2014-05-18", subject: "Trail Daze", tags: ["appalachian"] },
+    { date: "2014-11-26", subject: "Alaska Bound", tags: ["travel"] },
+    { date: "2014-12-07", subject: "Dec 7th", tags: ["milestone"] }
+  ]},
+  "2015": { total: 106, images: 531, words: 24517, notable: [
+    { date: "2015-01-18", subject: "Older", tags: ["milestone"] },
+    { date: "2015-02-02", subject: "Fwd: Herb", tags: ["loss"] },
+    { date: "2015-04-05", subject: "Easter", tags: ["celebration"] },
+    { date: "2015-04-05", subject: "Iceland", tags: ["travel"] },
+    { date: "2015-08-18", subject: "Last Friday on AT", tags: ["appalachian"] },
+    { date: "2015-12-13", subject: "My Brother's Keeper", tags: ["loss"] }
+  ]},
+  "2016": { total: 87, images: 443, words: 19823, notable: [
+    { date: "2016-01-17", subject: "80", tags: ["milestone", "celebration"] },
+    { date: "2016-03-27", subject: "Win Some Lose Some", tags: ["health"] },
+    { date: "2016-07-10", subject: "Tradition", tags: ["celebration"] },
+    { date: "2016-09-18", subject: "Family All Over", tags: ["family"] },
+    { date: "2016-12-11", subject: "Dec 8 1941", tags: ["milestone"] }
+  ]},
+  "2017": { total: 78, images: 412, words: 18234, notable: [
+    { date: "2017-01-15", subject: "LXXXI", tags: ["milestone"] },
+    { date: "2017-04-16", subject: "Easter", tags: ["celebration"] },
+    { date: "2017-05-14", subject: "Mother", tags: ["celebration"] },
+    { date: "2017-11-20", subject: "Pedigree", tags: ["milestone"] },
+    { date: "2017-12-03", subject: "Sadness", tags: ["loss"] }
+  ]},
+  "2018": { total: 74, images: 398, words: 17612, notable: [
+    { date: "2018-01-20", subject: "Birthday", tags: ["milestone", "celebration"] },
+    { date: "2018-04-01", subject: "He is Risen", tags: ["celebration"] },
+    { date: "2018-05-20", subject: "Sad", tags: ["loss"] },
+    { date: "2018-07-23", subject: "Janet", tags: ["family"] },
+    { date: "2018-08-14", subject: "Baby Snow Shower", tags: ["family"] }
+  ]},
+  "2019": { total: 74, images: 421, words: 17834, notable: [
+    { date: "2019-01-20", subject: "83 — Good Grief", tags: ["milestone"] },
+    { date: "2019-04-21", subject: "Easter", tags: ["celebration"] },
+    { date: "2019-05-19", subject: "A Ramp in Time", tags: ["appalachian"] },
+    { date: "2019-09-01", subject: "Family", tags: ["family"] },
+    { date: "2019-12-22", subject: "Joshua 10:13", tags: ["celebration"] }
+  ]},
+  "2020": { total: 74, images: 489, words: 18234, notable: [
+    { date: "2020-01-19", subject: "84-90", tags: ["milestone"] },
+    { date: "2020-03-22", subject: "Undisclosed Location", tags: ["health"] },
+    { date: "2020-04-12", subject: "He is Risen", tags: ["celebration"] },
+    { date: "2020-04-11", subject: "Bunny Prep", tags: ["celebration"] },
+    { date: "2020-09-21", subject: "Mari", tags: ["family"] }
+  ]},
+  "2021": { total: 70, images: 512, words: 17421, notable: [
+    { date: "2021-01-17", subject: "Tradition", tags: ["milestone"] },
+    { date: "2021-02-07", subject: "TAVR", tags: ["health"] },
+    { date: "2021-04-04", subject: "Easter", tags: ["celebration"] },
+    { date: "2021-08-22", subject: "Calm After", tags: ["celebration"] },
+    { date: "2021-11-28", subject: "Being Thankful", tags: ["celebration"] }
+  ]},
+  "2022": { total: 68, images: 498, words: 16823, notable: [
+    { date: "2022-01-16", subject: "Age-ed", tags: ["milestone"] },
+    { date: "2022-04-17", subject: "Easter", tags: ["celebration"] },
+    { date: "2022-04-24", subject: "Lowrie Showers", tags: ["loss"] },
+    { date: "2022-06-05", subject: "67th", tags: ["milestone"] },
+    { date: "2022-09-04", subject: "Gone Home", tags: ["loss"] }
+  ]},
+  "2023": { total: 75, images: 534, words: 18234, notable: [
+    { date: "2023-01-15", subject: "Age and Mileage", tags: ["milestone"] },
+    { date: "2023-03-12", subject: "87 and Counting", tags: ["milestone"] },
+    { date: "2023-04-09", subject: "Easter", tags: ["celebration"] },
+    { date: "2023-05-14", subject: "Mom", tags: ["loss"] },
+    { date: "2023-09-17", subject: "Remission", tags: ["health"] },
+    { date: "2023-11-05", subject: "Last Goodbye", tags: ["loss"] },
+    { date: "2023-12-10", subject: "Tradition", tags: ["celebration"] }
+  ]},
+  "2024": { total: 78, images: 612, words: 19234, notable: [
+    { date: "2024-01-21", subject: "Snowbound at 88 — still feeling unloved and unwanted", tags: ["milestone"] },
+    { date: "2024-03-22", subject: "2024 Chemo schedule", tags: ["health"] },
+    { date: "2024-03-31", subject: "Easter", tags: ["celebration"] },
+    { date: "2024-05-12", subject: "Momma", tags: ["loss"] },
+    { date: "2024-10-27", subject: "Rejoice", tags: ["celebration"] },
+    { date: "2024-11-10", subject: "Chemo", tags: ["health"] },
+    { date: "2024-12-25", subject: "Lest We Forget", tags: ["celebration"] }
+  ]},
+  "2025": { total: 55, images: 423, words: 13234, notable: [
+    { date: "2025-01-19", subject: "Surprise", tags: ["celebration"] },
+    { date: "2025-03-23", subject: "Spring", tags: ["celebration"] },
+    { date: "2025-04-20", subject: "Easter", tags: ["celebration"] },
+    { date: "2025-11-02", subject: "Two Years", tags: ["loss", "milestone"] },
+    { date: "2025-11-09", subject: "RIP", tags: ["loss"] },
+    { date: "2025-12-25", subject: "My Evening Sun", tags: ["celebration"] }
+  ]},
+  "2026": { total: 24, images: 187, words: 5821, notable: [
+    { date: "2026-01-15", subject: "Feast", tags: ["milestone"] },
+    { date: "2026-01-18", subject: "90", tags: ["milestone", "celebration"] },
+    { date: "2026-03-15", subject: "Patricia", tags: ["loss"] },
+    { date: "2026-03-29", subject: "Placeholder", tags: ["health"] },
+    { date: "2026-03-31", subject: "Free at Last", tags: ["celebration"] },
+    { date: "2026-04-05", subject: "He's Alive", tags: ["celebration"] },
+    { date: "2026-04-20", subject: "Alive and Kicking", tags: ["celebration"] },
+    { date: "2026-05-03", subject: "Abishag", tags: ["milestone", "loss"] }
+  ]}
+};
+
+const MAX_TOTAL = Math.max(...Object.values(ALL_DATA).map(d => d.total));
+let activeFilter = null;
+
+function formatDate(d) {
+  const [y, m, day] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${parseInt(day)}`;
+}
+
+function renderTimeline(filter) {
+  const container = document.getElementById('timeline');
+  container.innerHTML = '';
+
+  Object.entries(ALL_DATA).forEach(([year, data]) => {
+    const notable = filter
+      ? data.notable.filter(e => e.tags.includes(filter))
+      : data.notable;
+
+    if (filter && notable.length === 0) return;
+
+    const block = document.createElement('div');
+    block.className = 'year-block';
+
+    const barWidth = Math.round((data.total / MAX_TOTAL) * 260);
+
+    block.innerHTML = `
+      <div class="year-column">
+        <span class="year-label">${year}</span>
+        <span class="year-count">${data.total} letters</span>
+      </div>
+      <div class="year-content">
+        <div class="year-bar-row">
+          <div class="year-bar" style="width:${barWidth}px"></div>
+          <span class="year-bar-images">${data.images.toLocaleString()} photos · ${Math.round(data.words/1000)}k words</span>
+        </div>
+        <div class="notable-events" id="events-${year}"></div>
+        ${YEAR_NOTES[year] ? `<div class="year-note">${YEAR_NOTES[year]}</div>` : ''}
+      </div>
+    `;
+
+    container.appendChild(block);
+
+    const eventsContainer = document.getElementById(`events-${year}`);
+    notable.forEach(event => {
+      const item = document.createElement('div');
+      item.className = 'event-item';
+      const primaryTag = event.tags[0] || 'celebration';
+      item.innerHTML = `
+        <span class="event-dot dot-${primaryTag}"></span>
+        <span class="event-date">${formatDate(event.date)}</span>
+        <div>
+          <span class="event-subject">${event.subject}</span>
+          <div class="event-tags">
+            ${event.tags.map(t => `<span class="event-tag tag-${t}">${t}</span>`).join('')}
+          </div>
+        </div>
+      `;
+      eventsContainer.appendChild(item);
+    });
+  });
+}
+
+function filterTag(tag) {
+  activeFilter = tag;
+  renderTimeline(tag);
+}
+
+renderTimeline(null);
+</script>
+</div>
+<footer class="site-footer">
+  <p>Kenneth Wayne Buchanan · January 15, 1936 – May 2026</p>
+  <p style="margin-top:0.4rem">Assembled with love by the Buchanan &amp; Long families</p>
+</footer>
+<script src="../assets/script.js"></script>
+</body>
+</html>
