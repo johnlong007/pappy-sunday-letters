@@ -7,33 +7,237 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/style.css">
+<style>
+#tip { position: fixed; background: #1a1714; color: #f8f4ed; padding: 8px 12px; border-radius: 4px; font-size: 12px; font-family: 'Source Serif 4', Georgia, serif; max-width: 240px; z-index: 100; pointer-events: none; opacity: 0; transition: opacity 0.15s; line-height: 1.6; }
+.tree { display: flex; justify-content: center; padding: 1rem 1.5rem 2rem; overflow-x: auto; }
+.box { border: 1px solid #e8d9b8; border-radius: 4px; background: white; padding: 5px 10px; text-align: center; white-space: nowrap; transition: border-color 0.15s; }
+.box:hover { border-color: #c8a96e; }
+.box.root { background: #1a1714; border-color: #1a1714; }
+.box.spouse { background: #f8f4ed; border-color: #e8d9b8; }
+.box.deceased { background: #f2ead8; }
+.box-name { font-size: 11px; font-weight: 600; color: #1a1714; font-family: 'Playfair Display', Georgia, serif; }
+.root .box-name { color: #f8f4ed; }
+.spouse .box-name { color: #4a4540; }
+.box-sub { font-size: 9px; color: #8a8278; font-family: 'Source Serif 4', Georgia, serif; font-style: italic; margin-top: 1px; }
+.root .box-sub { color: #c8a96e; }
+.box-nick { font-size: 9px; color: #c8a96e; font-family: 'Source Serif 4', Georgia, serif; margin-top: 1px; }
+.vline { width: 1px; background: #e8d9b8; }
+.heart { padding: 0 8px; color: #c8a96e; font-size: 11px; }
+.couple { display: flex; align-items: center; }
+</style>
 </head>
 <body>
 <nav class="site-nav"><a href="../index.html" class="nav-title">Pappy's Sunday Letters</a><a href="../letters/index.html">Letters</a><a href="../timeline/index.html">Timeline</a><a href="../chapters/index.html">Chapters</a><a href="../family/index.html" class="nav-active">Family</a><a href="../about/index.html">About</a></nav>
 
-<div class="page-header"><p class="eyebrow">Cast of characters</p><h1>The Family</h1><p class="subtitle">A guide to the people who appear in eighteen years of letters</p></div>
-<div class="container">
-  <div class="family-section"><h2>Kenneth Wayne Buchanan — "Pappy"</h2><p>Born January 15, 1936, in Unicoi County, Tennessee. Mechanical engineer, AT trail maintainer, car restorer, and for eighteen years, the faithful chronicler of family life. He wrote his last Sunday letter on May 3, 2026, ten days before he passed. He was 90.</p></div>
-  <div class="family-section"><h2>Patricia Anne Showers — "GSH"</h2><p>Born March 12, 1936, in Lancaster, Pennsylvania. She and Pappy were classmates and married in 1955. Mother of six, fiercely independent. He called her GSH — Gracious Serving Helper — a joke drawn from a Baptist sermon that amused him precisely because it so perfectly didn't fit. She passed on October 31, 2023. He wrote the following Sunday anyway.</p></div>
-  <div class="family-section"><h2>Their six children</h2><ul class="family-list">
-    <li><strong>Alan</strong> — Robert Alan Buchanan (b. 1956). Married Catherine. Children: Cliff, Janet, Rachel, Martha.</li>
-    <li><strong>PBBD / Diane</strong> — Elizabeth Diane Buchanan (b. 1958). Married Earnest Walls; children: Aaron, Patricia Jane (PJ, 1988–2004). Married Dwight Brewer (d. 2016).</li>
-    <li><strong>Anita</strong> — Anita Lynn Buchanan (b. 1960). Married Joe Long. Children: Elizabeth, Catherine, Charles IV, Kenneth, John, Maria.</li>
-    <li><strong>Laura</strong> — Laura Marie Buchanan (b. 1963). Married Bob Jack. Children: Benjamin (married Christina), Allison, Christopher, Meredith.</li>
-    <li><strong>Linda</strong> — Linda Denise Buchanan (b. 1965). Married Dale Coulson. Children: David, Andrew, Rebecca, Sarah, Adam.</li>
-    <li><strong>Wayne</strong> — Randall Wayne Buchanan (b. 1966). Married Lisa Buchanan. Children: Gwendolyn, Steven, Jonathan, Thomas, Charlotte.</li>
-  </ul></div>
-  <div class="family-section"><h2>Pappy's siblings</h2><ul class="family-list">
-    <li><strong>Hazel</strong> — Hazel Jean Buchanan (b. 1930). Married Sherrell Griffith.</li>
-    <li><strong>Herb</strong> — Herbert Buchanan (b. 1931).</li>
-    <li><strong>Jimmy</strong> — James Parks Buchanan (b. 1933).</li>
-  </ul></div>
-  <div class="family-section"><h2>The family tree</h2><p>Pappy was a dedicated genealogist. His research traces the Buchanan and Garland lines back to the mid-1700s — James Buchanan, born June 1734 in North Carolina, is among the earliest documented ancestors. The family is rooted in the Appalachian mountains of western NC and eastern TN.</p><p style="margin-top:0.75rem;font-size:0.88rem;color:var(--ink-muted);font-style:italic;">A full interactive family tree will be added in a future update.</p></div>
+<div id="tip"></div>
+
+<div class="page-header">
+  <p class="eyebrow">Cast of characters</p>
+  <h1>The Family</h1>
+  <p class="subtitle">Three generations · Hover any name for details</p>
 </div>
+
+<div class="tree" id="tree"></div>
+
+<div class="container" style="padding-bottom:3rem">
+  <div class="family-section">
+    <h2>A note on nicknames</h2>
+    <p>Pappy had his own shorthand for the family. Patricia was GSH (Gracious Serving Helper — a Baptist sermon joke). Diane was PBBD. Linda was LLLL (Little Linda Lou Lou). He used these consistently across 18 years of letters without explanation.</p>
+  </div>
+
+  <div class="family-section">
+    <h2>Kenneth Long at CERN</h2>
+    <p>Kenneth David Long, Anita and Joe's son, is an experimental particle physicist. He spent two years as a CERN fellow in Geneva, Switzerland. Pappy visited Kenneth at CERN in March 2016 with Anita — his stated agenda: visit Kenneth, see the Large Hadron Collider, and attend church. In April 2026, five weeks before Pappy died, Kenneth's paper measuring the mass of the W boson with unprecedented precision was published in <em>Nature</em>. Pappy forwarded the MIT press release to the family distribution list that same day, without comment.</p>
+  </div>
+
+  <div class="family-section">
+    <h2>The family tree</h2>
+    <p>Pappy was a dedicated genealogist who spent decades researching and documenting the family's history. His archive contains census records, marriage bonds, military documents, oral history recordings, and hundreds of historical photographs stretching back to the 1700s.</p>
+    <p style="margin-top:0.75rem">On the Buchanan side, the line traces back to <strong>James Buchanan</strong>, born June 1734 in North Carolina. Through Patricia's Showers line, the family connects to the <strong>Mayflower</strong> — the family descends from <strong>John Alden</strong>, who sailed on the Mayflower in 1620. Pappy also traced a line to <strong>Robert II Stewart</strong> (b. 1314), King of Scotland.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1.5rem">
+      <div style="background:white;border:1px solid var(--sepia-light);border-radius:4px;padding:1rem">
+        <img src="lineage/JohntoJohnAlden.jpg" alt="Relationship to John Alden" style="width:100%;border-radius:2px;margin-bottom:0.75rem">
+        <p style="font-size:0.82rem;color:var(--ink-light);font-style:italic">12th great-grandson of John Alden (b. 1598), Mayflower passenger</p>
+      </div>
+      <div style="background:white;border:1px solid var(--sepia-light);border-radius:4px;padding:1rem">
+        <img src="lineage/JohntoRobertII.jpg" alt="Relationship to Robert II Stewart" style="width:100%;border-radius:2px;margin-bottom:0.75rem">
+        <p style="font-size:0.82rem;color:var(--ink-light);font-style:italic">19th great-grandson of Robert II Stewart (b. 1314), King of Scotland</p>
+      </div>
+      <div style="background:white;border:1px solid var(--sepia-light);border-radius:4px;padding:1rem">
+        <img src="lineage/JohntoearlyJohnB.jpg" alt="Relationship to John Buchanan" style="width:100%;border-radius:2px;margin-bottom:0.75rem">
+        <p style="font-size:0.82rem;color:var(--ink-light);font-style:italic">12th great-grandson of John Buchanan (b. ~1545)</p>
+      </div>
+      <div style="background:white;border:1px solid var(--sepia-light);border-radius:4px;padding:1rem">
+        <img src="lineage/JohntoDoss.jpg" alt="Relationship to William Dawson Buchanan" style="width:100%;border-radius:2px;margin-bottom:0.75rem">
+        <p style="font-size:0.82rem;color:var(--ink-light);font-style:italic">Half great-grandnephew of William Dawson Buchanan (b. 1879)</p>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.88rem;color:var(--ink-muted);font-style:italic">These relationship calculations were documented by Pappy using genealogy software. A full family tree will be added in a future update.</p>
+  </div>
+</div>
+
 <footer class="site-footer">
   <p>Kenneth Wayne Buchanan · January 15, 1936 – May 2026</p>
   <p style="margin-top:0.4rem">Compiled by John Long, May 2026</p>
 </footer>
 <script src="../assets/script.js"></script>
+
+<script>
+const tip = document.getElementById('tip');
+function showTip(e,h){tip.innerHTML=h;tip.style.opacity='1';moveTip(e);}
+function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-8)+'px';}
+function hideTip(){tip.style.opacity='0';}
+
+function Box(lines, cls, tipHtml) {
+  const d = document.createElement('div');
+  d.className = 'box' + (cls ? ' '+cls : '');
+  lines.forEach((l,i) => {
+    const s = document.createElement('div');
+    if (i === 0) s.className = 'box-name';
+    else if (l.startsWith('b.') || l.includes('–') || l.includes('d.')) s.className = 'box-sub';
+    else s.className = 'box-nick';
+    s.textContent = l;
+    d.appendChild(s);
+  });
+  if (tipHtml) {
+    d.style.cursor = 'pointer';
+    d.addEventListener('mouseenter', e => showTip(e, tipHtml));
+    d.addEventListener('mousemove', moveTip);
+    d.addEventListener('mouseleave', hideTip);
+  }
+  return d;
+}
+
+function VLine(h) {
+  const d = document.createElement('div');
+  d.className = 'vline';
+  d.style.height = h+'px';
+  return d;
+}
+
+function Heart() {
+  const d = document.createElement('div');
+  d.className = 'heart';
+  d.textContent = '♥';
+  return d;
+}
+
+function Couple(box1, box2) {
+  const d = document.createElement('div');
+  d.className = 'couple';
+  d.appendChild(box1);
+  d.appendChild(Heart());
+  d.appendChild(box2);
+  return d;
+}
+
+const data = [
+  {
+    name:'Alan', sub:'b. 1956', nick:null,
+    tip:'<strong>Robert Alan Buchanan</strong><br>b. 1956',
+    spouse:'Catherine', spouseTip:'<strong>Catherine Buchanan</strong><br>Married Alan Buchanan',
+    kids:[
+      { name:'Cliff',     tip:'<strong>Cliff Buchanan</strong><br>Alan & Catherine\'s son' },
+      { name:'Janet',     tip:'<strong>Janet Buchanan</strong><br>Alan & Catherine\'s daughter<br>Based in Wisconsin' },
+      { name:'Rachel',    tip:'<strong>Rachel Buchanan</strong><br>Alan & Catherine\'s daughter' },
+      { name:'Martha',    tip:'<strong>Martha Buchanan</strong><br>Alan & Catherine\'s daughter' },
+    ]
+  },
+  {
+    name:'Diane', sub:'b. 1958', nick:'PBBD',
+    tip:'<strong>Elizabeth Diane Buchanan</strong><br>b. 1958<br>m. Earnest Walls; m. Dwight Brewer (d. 2016)',
+    spouse:'Dwight Brewer', spouseTip:'<strong>Dwight Brewer</strong><br>Married Diane Buchanan<br>d. November 2016',
+    kids:[
+      { name:'Aaron',  tip:'<strong>Aaron Walls</strong><br>Diane\'s son (from first marriage)' },
+      { name:'PJ', sub:'1988–2004', dec:true, tip:'<strong>Patricia Jane Brewer</strong><br>Diane\'s daughter · 1988–2004' },
+    ]
+  },
+  {
+    name:'Anita', sub:'b. 1960', nick:'Nita',
+    tip:'<strong>Anita Lynn Buchanan</strong><br>b. 1960',
+    spouse:'Joe Long', spouseTip:'<strong>Charles Joseph Long III</strong><br>Married Anita Buchanan',
+    kids:[
+      { name:'Beth',    tip:'<strong>Elizabeth Long</strong><br>Anita & Joe\'s daughter' },
+      { name:'Katy',    tip:'<strong>Catherine Long</strong><br>Anita & Joe\'s daughter' },
+      { name:'Charlie', tip:'<strong>Charles Joseph Long IV</strong><br>Anita & Joe\'s son<br>Studied at Chung-Ang University, Seoul' },
+      { name:'Kenneth', tip:'<strong>Kenneth David Long</strong><br>Anita & Joe\'s son<br>Physicist · CERN fellow, MIT' },
+      { name:'John',    tip:'<strong>John Wesley Long</strong><br>Anita & Joe\'s son<br>Compiled this archive' },
+      { name:'Maria',   tip:'<strong>Maria Anita Long</strong><br>Anita & Joe\'s daughter' },
+    ]
+  },
+  {
+    name:'Laura', sub:'b. 1963', nick:null,
+    tip:'<strong>Laura Marie Buchanan</strong><br>b. 1963',
+    spouse:'Bob Jack', spouseTip:'<strong>Bob Jack</strong><br>Married Laura Buchanan',
+    kids:[
+      { name:'Benjamin',    tip:'<strong>Benjamin Jack</strong><br>Laura & Bob\'s son' },
+      { name:'Allison',     tip:'<strong>Allison Jack</strong><br>Laura & Bob\'s daughter' },
+      { name:'Christopher', tip:'<strong>Christopher Jack</strong><br>Laura & Bob\'s son' },
+      { name:'Meredith',    tip:'<strong>Meredith Jack</strong><br>Laura & Bob\'s daughter' },
+    ]
+  },
+  {
+    name:'Linda', sub:'b. 1965', nick:'LLLL',
+    tip:'<strong>Linda Denise Buchanan</strong><br>b. 1965',
+    spouse:'Dale Coulson', spouseTip:'<strong>Dale Coulson</strong><br>Married Linda Buchanan',
+    kids:[
+      { name:'David',   tip:'<strong>David Coulson</strong><br>Linda & Dale\'s son' },
+      { name:'Andrew',  tip:'<strong>Andrew Coulson</strong><br>Linda & Dale\'s son' },
+      { name:'Rebecca', tip:'<strong>Rebecca Coulson</strong><br>Linda & Dale\'s daughter' },
+      { name:'Sarah',   tip:'<strong>Sarah Coulson</strong><br>Linda & Dale\'s daughter' },
+      { name:'Adam',    tip:'<strong>Adam Coulson</strong><br>Linda & Dale\'s son' },
+    ]
+  },
+  {
+    name:'Wayne', sub:'b. 1966', nick:null,
+    tip:'<strong>Randall Wayne Buchanan</strong><br>b. 1966',
+    spouse:'Lisa', spouseTip:'<strong>Lisa Buchanan</strong><br>Married Wayne Buchanan',
+    kids:[
+      { name:'Gwendolyn', tip:'<strong>Gwendolyn Buchanan</strong><br>Wayne & Lisa\'s daughter' },
+      { name:'Steven',    tip:'<strong>Steven Buchanan</strong><br>Wayne & Lisa\'s son' },
+      { name:'Jonathan',  tip:'<strong>Jonathan Buchanan</strong><br>Wayne & Lisa\'s son' },
+      { name:'Thomas',    tip:'<strong>Thomas Buchanan</strong><br>Wayne & Lisa\'s son' },
+      { name:'Charlotte', tip:'<strong>Charlotte Buchanan</strong><br>Wayne & Lisa\'s daughter' },
+    ]
+  },
+];
+
+const tree = document.getElementById('tree');
+const rootWrap = document.createElement('div');
+rootWrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;width:100%';
+
+const rootCouple = Couple(
+  Box(['Kenneth "Pappy"','1936 – 2026'], 'root',
+    '<strong>Kenneth Wayne Buchanan</strong><br>b. Jan 15, 1936 · d. May 2026<br>Mechanical engineer, AT trail maintainer, car restorer'),
+  Box(['Patricia, Grandmother','1936 – 2023'], 'root',
+    '<strong>Patricia Anne Showers</strong><br>b. Mar 12, 1936 · d. Oct 31, 2023<br>Community band musician, mother of six')
+);
+rootWrap.appendChild(rootCouple);
+rootWrap.appendChild(VLine(20));
+
+const childrenRow = document.createElement('div');
+childrenRow.style.cssText = 'display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;justify-content:center';
+
+data.forEach(child => {
+  const col = document.createElement('div');
+  col.style.cssText = 'display:flex;flex-direction:column;align-items:center';
+  const childLines = child.nick ? [child.name, child.sub, child.nick] : [child.name, child.sub];
+  const childBox = Box(childLines, '', child.tip);
+  const spouseBox = Box([child.spouse], 'spouse', child.spouseTip);
+  col.appendChild(Couple(childBox, spouseBox));
+  col.appendChild(VLine(12));
+  const gcList = document.createElement('div');
+  gcList.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:5px';
+  child.kids.forEach(gc => {
+    const gcLines = gc.sub ? [gc.name, gc.sub] : [gc.name];
+    gcList.appendChild(Box(gcLines, gc.dec ? 'deceased' : '', gc.tip));
+  });
+  col.appendChild(gcList);
+  childrenRow.appendChild(col);
+});
+
+rootWrap.appendChild(childrenRow);
+tree.appendChild(rootWrap);
+</script>
 </body>
 </html>
